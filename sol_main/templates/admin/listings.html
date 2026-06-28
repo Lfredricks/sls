@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="tab-wrapper mb-3">
+    <div class="tab-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Manage Listings</h2>
+            <a href="{{ url_for('admin.new_listing') }}" class="btn btn-steel btn-sm">+ Add Listing</a>
+        </div>
+        <div class="mt-2">
+            <a href="{{ url_for('admin.listings') }}"
+               class="badge {% if not category %}badge-primary{% else %}badge-light{% endif %} mr-1">All</a>
+            <a href="{{ url_for('admin.listings', category='contractor') }}"
+               class="badge {% if category == 'contractor' %}badge-primary{% else %}badge-light{% endif %} mr-1">Contractors</a>
+            <a href="{{ url_for('admin.listings', category='vendor') }}"
+               class="badge {% if category == 'vendor' %}badge-primary{% else %}badge-light{% endif %}">Vendors</a>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+        <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    {% endfor %}
+{% endwith %}
+
+{% for listing in listings %}
+<article class="media content-section">
+    {% if listing.image_filename %}
+    <img src="{{ url_for('static', filename='profile_pics/' + listing.image_filename) }}"
+         class="article-img align-self-start mr-3" alt="{{ listing.name }}">
+    {% else %}
+    <img src="{{ url_for('static', filename='default_listing.png') }}"
+         class="article-img align-self-start mr-3" alt="No image">
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata d-flex justify-content-between">
+            <div>
+                <h6 class="font-weight-bold mb-0">{{ listing.name }}</h6>
+                <small class="text-muted">{{ listing.work_type }} &middot;
+                    <span class="badge badge-secondary">{{ listing.category }}</span>
+                </small>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ url_for('admin.edit_listing', listing_id=listing.id) }}"
+                   class="btn btn-sm btn-outline-secondary mr-2">Edit</a>
+                <form method="POST"
+                      action="{{ url_for('admin.delete_listing', listing_id=listing.id) }}"
+                      onsubmit="return confirm('Delete {{ listing.name }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        <p class="article-content mb-1">{{ listing.description }}</p>
+        <small class="text-muted">{{ listing.email }} &middot; {{ listing.phone }}</small>
+    </div>
+</article>
+{% else %}
+<div class="content-section text-center text-muted">
+    No listings yet. <a href="{{ url_for('admin.new_listing') }}">Add one.</a>
+</div>
+{% endfor %}
+
+<div class="mt-2 text-right">
+    <a href="{{ url_for('admin.dashboard') }}" class="small text-muted">&larr; Dashboard</a>
+    &nbsp;|&nbsp;
+    <a href="{{ url_for('admin.logout') }}" class="small text-muted">Log out</a>
+</div>
+{% endblock %}

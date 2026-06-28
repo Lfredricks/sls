@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- Search bar -->
+<div class="content-section mb-3">
+    <form method="GET" action="{{ url_for('vend.vendors') }}" class="mb-0">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control"
+                   placeholder="Search vendors…" value="{{ q }}">
+            {% if work_types %}
+            <select name="work_type" class="form-control ml-2" style="max-width:200px;">
+                <option value="">All types</option>
+                {% for wt in work_types %}
+                <option value="{{ wt }}" {% if selected_work_type == wt %}selected{% endif %}>{{ wt }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+            <div class="input-group-append ml-2">
+                <button class="btn btn-steel" type="submit">Search</button>
+                {% if q or selected_work_type %}
+                <a href="{{ url_for('vend.vendors') }}" class="btn btn-outline-secondary ml-1">Clear</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Results -->
+{% if listings %}
+    {% for listing in listings %}
+    <article class="media content-section">
+        {% if listing.image_filename %}
+        <img src="{{ url_for('static', filename='profile_pics/' + listing.image_filename) }}"
+             class="article-img align-self-start mr-3" alt="{{ listing.name }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='default_listing.png') }}"
+             class="article-img align-self-start mr-3" alt="">
+        {% endif %}
+        <div class="media-body">
+            <div class="article-metadata">
+                <h2 class="font-weight-bold mb-0"><a href="{{ url_for('vend.vendor_detail', listing_id=listing.id) }}" class="article-title">{{ listing.name }}</a></h2>
+                <small class="text-muted">{{ listing.work_type }}</small>
+            </div>
+            <p class="article-content">{{ listing.description }}</p>
+            <strong>Contact Information:</strong>
+            <ul class="mb-0">
+                {% if listing.website %}
+                <li><a href="{{ listing.website }}" target="_blank" rel="noopener">{{ listing.website }}</a></li>
+                {% endif %}
+                <li>Email: <a href="mailto:{{ listing.email }}">{{ listing.email }}</a></li>
+                <li>Phone: {{ listing.phone }}</li>
+            </ul>
+        </div>
+    </article>
+    {% endfor %}
+{% else %}
+    <div class="content-section text-center text-muted">
+        No vendors found{% if q %} for "{{ q }}"{% endif %}.
+    </div>
+{% endif %}
+
+{% endblock content %}

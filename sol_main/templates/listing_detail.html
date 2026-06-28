@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% set share_text = listing.name ~ " — " ~ listing.work_type ~ "\n"
+   ~ "Phone: " ~ listing.phone ~ "\n"
+   ~ "Email: " ~ listing.email
+   ~ ("\nWebsite: " ~ listing.website if listing.website else "")
+   ~ "\nMore info: " ~ request.url %}
+{% set mailto = "mailto:?subject=" ~ ("Contact: " ~ listing.name) | urlencode
+   ~ "&body=" ~ share_text | urlencode %}
+
+<article class="media content-section">
+    {% if listing.image_filename %}
+    <img src="{{ url_for('static', filename='profile_pics/' + listing.image_filename) }}"
+         class="article-img align-self-start mr-3" alt="{{ listing.name }}">
+    {% else %}
+    <img src="{{ url_for('static', filename='default_listing.png') }}"
+         class="article-img align-self-start mr-3" alt="">
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata">
+            <h2 class="font-weight-bold article-title">{{ listing.name }}</h2>
+            <small class="text-muted">{{ listing.work_type }}</small>
+        </div>
+        <p class="article-content">{{ listing.description }}</p>
+        <strong>Contact Information:</strong>
+        <ul>
+            {% if listing.website %}
+            <li><a href="{{ listing.website }}" target="_blank" rel="noopener">{{ listing.website }}</a></li>
+            {% endif %}
+            <li>Email: <a href="mailto:{{ listing.email }}">{{ listing.email }}</a></li>
+            <li>Phone: {{ listing.phone }}</li>
+        </ul>
+        <button type="button" class="btn btn-steel" id="share-btn"
+                data-share-title="{{ listing.name }}"
+                data-share-text="{{ share_text }}"
+                data-share-url="{{ request.url }}"
+                data-share-mailto="{{ mailto }}">Share</button>
+    </div>
+</article>
+
+<div class="mt-2">
+    {% if listing.category == 'contractor' %}
+    <a href="{{ url_for('cont.contractors') }}" class="small text-muted">&larr; All contractors</a>
+    {% else %}
+    <a href="{{ url_for('vend.vendors') }}" class="small text-muted">&larr; All vendors</a>
+    {% endif %}
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    document.getElementById('share-btn').addEventListener('click', async function () {
+        var d = this.dataset;
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: d.shareTitle, text: d.shareText, url: d.shareUrl });
+            } catch (e) { /* user cancelled — ignore AbortError */ }
+        } else {
+            window.location.href = d.shareMailto;  // email fallback
+        }
+    });
+</script>
+{% endblock scripts %}

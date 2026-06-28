@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <h3 class="mb-3">{{ legend }}</h3>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+            <div class="alert alert-{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.category.label }}
+                {{ form.category(class="form-control") }}
+                {% for e in form.category.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.work_type.label }}
+                {{ form.work_type(class="form-control", placeholder="e.g. Plumbing") }}
+                {% for e in form.work_type.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label }}
+            {{ form.description(class="form-control", rows=4) }}
+            {% for e in form.description.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.phone.label }}
+                {{ form.phone(class="form-control", placeholder="(206) 555-0100") }}
+                {% for e in form.phone.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", placeholder="contact@example.com") }}
+                {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.website.label }} <span class="text-muted small">(optional)</span>
+            {{ form.website(class="form-control", placeholder="https://example.com") }}
+            {% for e in form.website.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.image.label }} <span class="text-muted small">(optional — JPG, PNG, or GIF)</span>
+            {% if listing and listing.image_filename %}
+                <div class="mb-2">
+                    <img src="{{ url_for('static', filename='profile_pics/' + listing.image_filename) }}"
+                         height="65" style="border-radius:10px;" alt="Current image">
+                    <small class="text-muted ml-2">Current image — upload a new one to replace it.</small>
+                </div>
+            {% endif %}
+            {{ form.image(class="form-control-file") }}
+            {% for e in form.image.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <hr>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('admin.listings') }}" class="btn btn-outline-secondary">Cancel</a>
+            {{ form.submit(class="btn btn-steel") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

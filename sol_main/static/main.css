@@ -1,0 +1,219 @@
+/* Base  */
+body {
+    background: #e8e8e8;
+    color: #1d1d1f;
+    margin-top: 5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1d1d1f;
+    letter-spacing: -0.3px;
+}
+
+a {
+    color: #0071e3;  /* Apple's blue link color */
+}
+
+a:hover {
+    color: #0077ed;
+    text-decoration: none;
+}
+
+/* Layout */
+.page-wrapper {
+    background: #f5f5f7;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+.container {
+    background: transparent;
+}
+
+/*  Navbar  */
+.bg-steel {
+    background-color: #0B233D !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1d1d1f;
+}
+
+.navbar-brand {
+    font-weight: 500;
+    letter-spacing: -0.3px;
+}
+
+.site-header .navbar-nav .nav-link {
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+    color: #797979;
+}
+
+.site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+    color: #ffffff;
+}
+
+/*  Content Sections  */
+.content-section {
+    background: #ffffff;
+    padding: 16px 20px;
+    border: 1px solid #d2d2d7;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/*  Sidebar */
+.sidebar {
+    padding: 20px;
+}
+
+.sidebar-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 2px;
+}
+
+.sidebar-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+}
+
+.sidebar-icon {
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.list-group-flush .list-group-item {
+    border-left: none;
+    border-right: none;
+    border-color: #d2d2d7;
+    font-size: 0.9rem;
+    color: #1d1d1f;
+    background: transparent;
+    padding: 10px 4px;
+}
+
+.list-group-flush .list-group-item:first-child {
+    border-top: none;
+}
+
+.content-section .list-group-item-action:hover {
+    background-color: #f5f5f7;
+    color: #0071e3;
+    cursor: pointer;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}
+
+/*  Articles*/
+.article-title {
+    color: #1d1d1f;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+a.article-title:hover {
+    color: #0071e3;
+    text-decoration: none;
+}
+
+.article-content {
+    white-space: pre-line;
+    color: #6e6e73;  /* Apple's secondary text color */
+    font-size: 0.95rem;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+    border-radius: 10px;  /* rounded image corners */
+}
+
+.article-metadata {
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #d2d2d7;
+    color: #6e6e73;
+    font-size: 0.85rem;
+}
+
+.article-metadata a:hover {
+    color: #0071e3;
+    text-decoration: none;
+}
+
+.article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+
+/* Tab Containers  */
+:root {
+    --radius: 12px;
+}
+
+.tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.tab-label {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #d2d2d7;
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    color: #1d1d1f;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+}
+
+.tab-body {
+    background: #ffffff;
+    border: 1px solid #d2d2d7;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Account  */
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    border: 3px solid #d2d2d7;
+}
+
+.account-heading {
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+}
+
+/* Buttons */
+.btn-steel {
+    background-color: #0071e3;  /* Apple's blue button color */
+    color: #ffffff;
+    border: none;
+    border-radius: 980px;       /* Apple uses pill-shaped buttons */
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-steel:hover {
+    background-color: #0077ed;
+    color: #ffffff;
+}
