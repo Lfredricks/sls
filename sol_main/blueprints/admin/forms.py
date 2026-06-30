@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, URL
 
@@ -21,7 +20,4 @@ class ListingForm(FlaskForm):
     phone = StringField('Phone', validators=[DataRequired(), Length(max=20)])
     email = StringField('Email', validators=[DataRequired(), Length(max=120)])
     website = StringField('Website', validators=[Optional(), URL(), Length(max=200)])
-    image = FileField('Profile Picture', validators=[
-        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only')
-    ])
     submit = SubmitField('Save')

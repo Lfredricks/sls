@@ -1,18 +1,14 @@
 from flask import Flask
 from config import Config
-from extensions import db, migrate, login_manager, csrf
+from extensions import login_manager, csrf
 
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
     login_manager.init_app(app)
     csrf.init_app(app)
-
-    import models  # noqa: F401 — ensures models are registered with SQLAlchemy metadata
 
     from blueprints.main import bp as main_bp
     from blueprints.cont import bp as cont_bp
@@ -29,8 +25,8 @@ def create_app(config_class=Config):
 
 @login_manager.user_loader
 def load_user(user_id):
-    from models import AdminUser
-    return AdminUser.query.get(int(user_id))
+    import data
+    return data.get_user_by_id(user_id)
 
 
 if __name__ == '__main__':

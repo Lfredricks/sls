@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Branch note — `hardcoded-demo`:** This branch is a database-free demo. All
+> listings live in an in-memory Python list (`sol_main/data.py`), and admin login
+> uses a single hardcoded account. There is **no database, no migrations, no
+> seeding, and no image upload**. Admin add/edit/delete work but persist only for
+> the lifetime of the running server — they **reset on restart**. See the `main`
+> branch for the full database-backed app.
+
 ## Running the App
 
 All commands must be run from `sol_main/` so blueprint imports resolve correctly.
@@ -18,35 +25,31 @@ cd sol_main
 flask run
 ```
 
-## Database Setup
+No database or seed step is required — data is hardcoded and loaded on import.
 
-```bash
-cd sol_main
-flask db upgrade          # apply migrations (creates the DB on first run)
-python seed.py            # seed 5 contractors, 5 vendors, admin user (admin/changeme)
-```
+## Admin Login
 
-```bash
-flask db migrate -m "description"   # generate a new migration after changing models.py
-flask db downgrade                  # roll back one migration
-```
+A single hardcoded admin account is built in `data.py`:
 
-The DB file (`instance/solomon.db`) is gitignored. Migration version files (`migrations/versions/*.py`) are also gitignored — regenerate with `flask db migrate`.
+- **username:** `admin`
+- **password:** `changeme`
 
 ## Environment
 
-Create `solomon/.env` (gitignored) before running:
+Create `.env` at the project root (gitignored) before running:
 
 ```env
 SECRET_KEY=replace-this-with-a-long-random-string
-DATABASE_URL=sqlite:///solomon.db
 ```
 
-`config.py` calls `load_dotenv(override=True)` — the `override=True` is intentional to prevent a stale shell `DATABASE_URL` from shadowing the `.env` value.
+`config.py` calls `load_dotenv(override=True)`. `SECRET_KEY` signs sessions and
+CSRF tokens; a dev fallback is used if unset.
 
 ## Architecture
 
-**Application factory:** `sol_main/app.py` → `create_app()`. Extensions (`db`, `migrate`, `login_manager`) are instantiated in `extensions.py` and initialized inside `create_app()` to avoid circular imports.
+**Application factory:** `sol_main/app.py` → `create_app()`. Extensions
+(`login_manager`, `csrf`) are instantiated in `extensions.py` and initialized
+inside `create_app()` to avoid circular imports.
 
 **Blueprints** (all under `sol_main/blueprints/`):
 - `main` — home page (`/`, `/home`)
@@ -54,26 +57,30 @@ DATABASE_URL=sqlite:///solomon.db
 - `vend` — vendors directory (`/vendors`) with same search
 - `admin` — auth + full CRUD (`/admin/*`), all routes `@login_required`
 
-**Models** (`models.py`):
-- `Listing` — single table for both contractors and vendors; `category` column is `'contractor'` or `'vendor'`
-- `AdminUser` — single admin account with `UserMixin`; password stored as Werkzeug PBKDF2 hash
-
-**`import models` in `create_app()`** is required so SQLAlchemy metadata is populated before Alembic introspects it during migrations.
+**Data layer** (`data.py`) — replaces the database on this branch:
+- `Listing` — a plain Python class (attribute access only); `category` is `'contractor'` or `'vendor'`. `image_filename` holds a static-relative path (e.g. `demo_pics/abc.jpg`) or `None` to fall back to the default image.
+- `AdminUser` — single hardcoded admin (`UserMixin`); password hashed with Werkzeug at startup.
+- `_LISTINGS` — the in-memory store, seeded by `_seed()` at import time (5 contractors + 5 vendors).
+- Repository functions: `search`, `get`, `distinct_work_types`, `counts`, `recent`, `all_listings`, `add`, `update`, `delete`, `get_user_by_id`, `get_user_by_username`.
 
 **Admin blueprint** (`blueprints/admin/`):
-- `forms.py` — `LoginForm`, `ListingForm` (Flask-WTF with CSRF)
-- `routes.py` — login/logout, dashboard, listings list, new/edit/delete; `_save_image()` uses Pillow to validate, resize to max 800×800, and save as JPEG with a UUID filename; `_delete_image()` removes old files on replace/delete
+- `forms.py` — `LoginForm`, `ListingForm` (Flask-WTF with CSRF). No image field.
+- `routes.py` — login/logout, dashboard, listings list, new/edit/delete. CRUD calls the `data.*` repository functions; mutations are in-memory only.
 
-**Search:** GET-based forms with SQLAlchemy `ilike` across `name`, `work_type`, and `description`. Results are bookmarkable.
+**Search:** GET-based forms; `data.search()` does case-insensitive substring
+matching across `name`, `work_type`, and `description`. Results are bookmarkable.
 
-**Profile pictures:** Uploaded images go to `static/profile_pics/` (gitignored). Filenames are `uuid4().hex + '.jpg'` — never user-supplied. Listings without an image fall back to `static/default_listing.png`.
+**Profile pictures:** Each seeded listing references a bundled image under
+`static/demo_pics/` (committed). Listings created via the admin form have no
+image and fall back to `static/default_listing.png`. There is no upload feature
+on this branch.
 
 ## Key Files
 
 | File | Purpose |
 |---|---|
-| `config.py` | Loads `.env`, sets `SECRET_KEY`, `SQLALCHEMY_DATABASE_URI`, `UPLOAD_FOLDER`, `MAX_CONTENT_LENGTH` (8 MB) |
-| `extensions.py` | Shared `db`, `migrate`, `login_manager` instances |
-| `models.py` | `Listing` and `AdminUser` ORM models |
-| `seed.py` | One-time seed script; idempotent (skips if data exists) |
+| `config.py` | Loads `.env`, sets `SECRET_KEY` and session cookie flags |
+| `extensions.py` | Shared `login_manager`, `csrf` instances |
+| `data.py` | In-memory `Listing`/`AdminUser` data + repository functions (no DB) |
+| `static/demo_pics/` | Bundled listing images referenced by the seeded data |
 | `templates/layout.html` | Base template (Bootstrap 4); flash messages block included |

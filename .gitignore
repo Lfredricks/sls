@@ -15,17 +15,6 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Databases (local instance data)
-*.db
-*.sqlite3
-sol_main/instance/
-
-# User-uploaded media
-sol_main/static/profile_pics/
-
-# Alembic migration versions (regenerated locally — see CLAUDE.md)
-sol_main/migrations/versions/*.py
-
 # Editor / OS cruft
 *~
 *.swp

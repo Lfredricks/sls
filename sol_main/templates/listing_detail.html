@@ -11,7 +11,7 @@
 
 <article class="media content-section">
     {% if listing.image_filename %}
-    <img src="{{ url_for('static', filename='profile_pics/' + listing.image_filename) }}"
+    <img src="{{ url_for('static', filename=listing.image_filename) }}"
          class="article-img align-self-start mr-3" alt="{{ listing.name }}">
     {% else %}
     <img src="{{ url_for('static', filename='default_listing.png') }}"
