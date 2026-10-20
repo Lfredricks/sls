@@ -20,5 +20,5 @@ __pycache__/
 *.swp
 .DS_Store
 
-# Local Claude Code settings (machine-specific)
-.claude/settings.local.json
+# Local Claude Code files (settings, launch config, worktrees)
+.claude/

@@ -40,5 +40,34 @@
         <p class="text-center">*Please note that the linked repository does not reflect the proper commit history as I had to clone and create a new one in order to keep it separated from the production product.</p>
     </div>
 </div>
+<div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">Guide to Self Hosting</h2>
+        <p class="text-center">Follow these steps to run the full version of this project, with its SQLite database, on your own computer. You will need <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python 3.10 or newer</a> and <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> installed.</p>
+        <ol>
+            <li class="mb-2">Clone the main branch of the repository and move into it:
+                <pre class="mb-0 mt-1"><code>git clone --branch main https://github.com/Lfredricks/SLS.git
+cd SLS</code></pre>
+            </li>
+            <li class="mb-2">Create a virtual environment and activate it:
+                <pre class="mb-0 mt-1"><code>python -m venv venv
+venv\Scripts\activate        (Windows)
+source venv/bin/activate     (macOS / Linux)</code></pre>
+            </li>
+            <li class="mb-2">Install the dependencies:
+                <pre class="mb-0 mt-1"><code>pip install -r requirements.txt</code></pre>
+            </li>
+            <li class="mb-2">Move into the app folder and create the database. This builds the SQLite file at <code>sol_main/instance/solomon.db</code> and fills it with sample listings and the admin account:
+                <pre class="mb-0 mt-1"><code>cd sol_main
+python seed.py</code></pre>
+            </li>
+            <li class="mb-2">Start the website:
+                <pre class="mb-0 mt-1"><code>python app.py</code></pre>
+                Then open <code>http://localhost:5000</code> in your browser. Log in to the admin area at <code>http://localhost:5000/admin/login</code> with username <strong>admin</strong> and password <strong>changeme</strong>. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal to stop the server.
+            </li>
+        </ol>
+        <p class="text-center mb-0">Unlike this demo, changes you make there are saved in the database file. To start over with fresh sample data, delete <code>sol_main/instance/solomon.db</code> and run <code>python seed.py</code> again.</p>
+    </div>
+</div>
 {% endblock %}
 {% block sidebar %}{% endblock %}
