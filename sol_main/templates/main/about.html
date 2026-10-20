@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content_col %}col-md-12{% endblock %}
+{% block content %}
+<div class="tab-wrapper">
+    <div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">User Guide</h2>
+        <p class="text-center">Use the <a href="{{ url_for('cont.contractors') }}">Contractors</a> and <a href="{{ url_for('vend.vendors') }}">Vendors</a> tabs in the header to browse every listing. Type a name, trade, or keyword into the search bar, or pick a work type from the dropdown, to narrow the results. Click any listing to see its full details and contact information.</p>
+        <p class="text-center">To add, edit, or remove listings, click the <a href="{{ url_for('admin.login') }}">Admin Login</a> button in the top right corner and sign in with username <strong>admin</strong> and password <strong>changeme</strong>. From the dashboard you can manage all listings. Note that this is a demo, so any changes reset when the server restarts.</p>
+    </div>
+</div>
+    <div class="tab-body">
+        <h2 class="text-center">The Company Behind The Software</h2>
+        <p class="text-center">Hello, My name is Lucas Fredricks, I am a current computer science student at San Diego State University and the founder of Solomon Logistical Solutions. We are a software company focused on providing personalized software to small and medium construction companies. As the son of two parents that work in the construction industry I am quite familiar with the industry and its faults, especially when it comes to how archaic their information management systems are. Our current product is a web app that is used for storing, tracking and displaying vendors and subcontractors so that field and office workers alike have easy access to the information they need most frequently.</p>
+    </div>
+</div>
+<div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">The Problem at Hand</h2>
+        <p class="text-center">My mother, an administrative assistant at a construction company, once described how they have a single spreadsheet called, “The Rolodex” that manages thousands of contacts for vendors and subcontractors sitting on a single desktop in the office. This means that anytime anyone needs to access contact information, someone has to go to that computer, search through a massive spreadsheet and if they manage to find what they were looking for, copy it down to their own device.</p>
+    </div>
+</div>
+<div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">The Solution</h2>
+        <p class="text-center">The website you are on right now is our answer to modernizing this system. With this web application, we remove the aforementioned problem of having to physically make your way to the computer and dig through thousands of disorganized contacts simply to find a phone number. Using our software, it's as simple as going to the website and searching for whoever you want to get in contact with.</p>
+    </div>
+</div>
+<div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">This Products Future</h2>
+        <p class="text-center">As mentioned, this software aims to solve a problem I came across in my real life. Over the course of the past few months, I have been in contact with the owners of the construction company my mother works for. After explaining the product and showing them the demo you are about to see, they expressed interest in purchasing the software and I have been working with them since.</p>
+    </div>
+</div>
+<div class="tab-wrapper">
+    <div class="tab-body">
+        <h2 class="text-center">A Brief Overview of the Source Code</h2>
+        <p class="text-center">This website was originally written in Python using Flask as a way for me to familiarize myself with Python web development. Regarding the use of AI in the development of this product, AI was used in brainstorming, debugging and to generate dummy data to display for the demo. Database development was done using SQLite through Flask-SQLAlchemy. The final product will use a MySQL database.</p>
+    </div>
+</div>
+{% endblock %}
+{% block sidebar %}{% endblock %}
